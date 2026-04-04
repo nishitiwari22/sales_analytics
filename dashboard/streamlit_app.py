@@ -4,7 +4,7 @@
 from pathlib import Path
 import pandas as pd
 import streamlit as st
-# from sqlalchemy import create_engine
+from sqlalchemy import create_engine
 
 @st.cache_data
 def load_data():
@@ -12,7 +12,7 @@ def load_data():
     file_path = base_path / "data" / "sales.csv"
     return pd.read_csv(file_path)
 
-# engine = create_engine("sqlite:///sales.db")
+engine = create_engine("sqlite:///sales.db")
 
 
 df = load_data()
