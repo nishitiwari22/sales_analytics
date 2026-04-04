@@ -19,7 +19,15 @@ df = load_data()
 
 st.title("📊 Sales Analytics Dashboard")
 
-df = pd.read_sql("SELECT * FROM sales", engine)
+import os
+
+file_path = os.path.join(os.getcwd(), "data", "sales.csv")
+
+if not os.path.exists(file_path):
+    st.error(f"File not found: {file_path}")
+    st.stop()
+
+df = pd.read_csv(file_path)
 
 st.subheader("Raw Data")
 df = pd.read_csv("sales.csv")
