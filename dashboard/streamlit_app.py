@@ -20,12 +20,10 @@ df = load_data()
 st.title("📊 Sales Analytics Dashboard")
 
 import os
+from sqlalchemy import create_engine
 
-file_path = os.path.join(os.getcwd(), "data", "sales.csv")
-
-if not os.path.exists(file_path):
-    st.error(f"File not found: {file_path}")
-    st.stop()
+db_path = os.path.join(os.getcwd(), "sales.db")
+engine = create_engine(f"sqlite:///{db_path}")
 
 df = pd.read_csv(file_path)
 
