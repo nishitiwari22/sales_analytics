@@ -6,11 +6,20 @@ import pandas as pd
 import streamlit as st
 from sqlalchemy import create_engine
 
+import os
+
 @st.cache_data
 def load_data():
-    base_path = Path(__file__).parent.parent  # go to project root
-    file_path = base_path / "data" / "sales.csv"
-    return pd.read_csv(file_path)
+    file_path = os.path.join(os.getcwd(), "data", "sales.csv")
+
+    if not os.path.exists(file_path):
+        st.error(f"❌ File not found: {file_path}")
+        st.stop()
+
+    df = pd.read_csv(file_path)
+    return df
+
+df = load_data()
 
 engine = create_engine("sqlite:///sales.db")
 
