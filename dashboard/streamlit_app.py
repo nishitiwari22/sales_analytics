@@ -1,13 +1,16 @@
-# import streamlit as st
-# import pandas as pd
-
-from pathlib import Path
-import pandas as pd
 import streamlit as st
-from sqlalchemy import create_engine
-
+import pandas as pd
 import os
 
+# -------------------------------
+# PAGE CONFIG
+# -------------------------------
+st.set_page_config(page_title="Sales Dashboard", layout="wide")
+st.title("📊 Sales Analytics Dashboard")
+
+# -------------------------------
+# LOAD DATA
+# -------------------------------
 @st.cache_data
 def load_data():
     file_path = os.path.join(os.getcwd(), "data", "sales.csv")
@@ -21,42 +24,28 @@ def load_data():
 
 df = load_data()
 
-engine = create_engine("sqlite:///sales.db")
-
-
-df = load_data()
-
-st.title("📊 Sales Analytics Dashboard")
-
-import os
-from sqlalchemy import create_engine
-
-db_path = os.path.join(os.getcwd(), "sales.db")
-engine = create_engine(f"sqlite:///{db_path}")
-
-df = pd.read_csv(file_path)
-
+# -------------------------------
+# RAW DATA
+# -------------------------------
 st.subheader("Raw Data")
-df = pd.read_csv("sales.csv")
 st.dataframe(df)
-# 
-# Revenue by Region
+
+# -------------------------------
+# REVENUE BY REGION
+# -------------------------------
 st.subheader("Revenue by Region")
-region_sales = df.groupby("Region")["Sales"].sum()
-st.bar_chart(region_sales)
+if "Region" in df.columns and "Sales" in df.columns:
+    region_sales = df.groupby("Region")["Sales"].sum()
+    st.bar_chart(region_sales)
+else:
+    st.warning("Columns 'Region' or 'Sales' not found.")
 
-# Profit by Category
+# -------------------------------
+# PROFIT BY CATEGORY
+# -------------------------------
 st.subheader("Profit by Category")
-category_profit = df.groupby("Category")["Profit"].sum()
-st.bar_chart(category_profit)
-
-@st.cache_data
-def load_data():
-    return pd.read_sql("SELECT * FROM sales", engine)
-
-df = load_data()
-
-
-df = load_data()
-
-st.dataframe(df)
+if "Category" in df.columns and "Profit" in df.columns:
+    category_profit = df.groupby("Category")["Profit"].sum()
+    st.bar_chart(category_profit)
+else:
+    st.warning("Columns 'Category' or 'Profit' not found.")
