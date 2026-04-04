@@ -1,12 +1,25 @@
-import streamlit as st
-import pandas as pd
-# from sqlalchemy import create_engine
+# import streamlit as st
+# import pandas as pd
 
-# engine = create_engine("sqlite:///sales.db")
+from pathlib import Path
+import pandas as pd
+import streamlit as st
+from sqlalchemy import create_engine
+
+@st.cache_data
+def load_data():
+    base_path = Path(__file__).parent.parent  # go to project root
+    file_path = base_path / "data" / "sales.csv"
+    return pd.read_csv(file_path)
+
+engine = create_engine("sqlite:///sales.db")
+
+
+df = load_data()
 
 st.title("📊 Sales Analytics Dashboard")
 
-# df = pd.read_sql("SELECT * FROM sales", engine)
+df = pd.read_sql("SELECT * FROM sales", engine)
 
 st.subheader("Raw Data")
 df = pd.read_csv("sales.csv")
